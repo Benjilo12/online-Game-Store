@@ -42,7 +42,7 @@ export const getFeaturedProducts = async (req, res) => {
 //! Controller function to create a new product
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, image, platform } = req.body;
+    const { name, price, description, image, platform, category } = req.body;
 
     let cloudinaryResponse = null;
 
@@ -52,11 +52,17 @@ export const createProduct = async (req, res) => {
       });
     }
 
+    // If upload fails or no secure_url
+    if (!cloudinaryResponse?.secure_url) {
+      return res.status(400).json({ message: "Image upload failed" });
+    }
+
     const product = await Product.create({
       name,
       price,
       description,
-      image: cloudinaryResponse ? cloudinaryResponse.secure_url : "",
+      image: cloudinaryResponse.secure_url,
+      category,
       platform,
     });
     res.status(201).json(product);

@@ -42,7 +42,7 @@ function Navbar() {
             {/* Admin Dashboard */}
             {isAdmin && (
               <Link
-                to="/admin/dashboard"
+                to="/secret-dashboard"
                 className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
               >
                 <Lock className="inline-block mr-1" size={18} />

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
-import e from "express";
+
 // Middleware to protect routes by verifying access tokens
 export const protectRoute = async (req, res, next) => {
   try {
