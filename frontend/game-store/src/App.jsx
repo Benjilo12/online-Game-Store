@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import AdminPage from "./pages/AdminPage";
+import GamePage from "./pages/GamePage";
 
 function App() {
   const { user, checkAuth } = useUserStore();
@@ -16,15 +17,16 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<GamePage />} />
         <Route
           path="/signup"
-          element={!user ? <SignUpPage /> : <Navigate to="/" />}
+          element={!user ? <SignUpPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"
           element={!user ? <LoginPage /> : <Navigate to="/" />}
         />
+
         <Route
           path="/secret-dashboard"
           element={
