@@ -10,62 +10,78 @@ import { Link } from "react-router-dom";
 function Header({ handleToggleActive }) {
   const user = true; // Replace with actual user state management
   const isAdmin = true; // Replace with actual admin state management
+
   return (
-    <header className=" relative top-0 left-0 w-full flex place-content-between items-center z-1000 bg-transparentpx-[30px] py-[20px] mt-4">
-      <Link className="menu" onClick={handleToggleActive}>
-        <SlidersHorizontal className="ml-7" />
-      </Link>
-      <div className="inline-flex center gap-[20px] mr-4">
-        {user && (
-          <nav className="flex flex-wrap items-center gap-4">
-            {/* Cart */}
-            <Link className="relative group p-[2px] rounded transition duration-300 ease-in-out">
-              <ShoppingCart
-                className="inline-block mr-1 group-hover:text-emerald-400"
-                size={20}
-              />
-              <span className="absolute -top-3 -right-2 bg-green-400 text-white rounded-full px-2 py-0.5 text-xs group-hover:bg-green-300 transition duration-300 ease-in-out">
+    <header className="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 flex justify-between items-center border-b border-gray-800">
+      {/* Menu Toggle Button */}
+      <button
+        onClick={handleToggleActive}
+        className="p-2 rounded-full hover:bg-gray-800 transition-colors duration-200"
+        aria-label="Toggle menu"
+      >
+        <SlidersHorizontal className="h-5 w-5 md:h-6 md:w-6" />
+      </button>
+
+      {/* Navigation Actions */}
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+        {user ? (
+          <>
+            {/* Cart with Badge - Always visible icon */}
+            <Link
+              to="/cart"
+              className="p-2 relative rounded-full hover:bg-gray-800 transition-colors duration-200"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingCart className="h-5 w-5 md:h-6 md:w-6 text-gray-300 hover:text-emerald-400" />
+              <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                 3
               </span>
             </Link>
 
-            {/* Wishlist */}
-            <Link className="relative group p-[2px] rounded">
-              <Heart
-                className="inline-block mr-1 group-hover:text-pink-400 transition duration-300 ease-in-out"
-                size={20}
-              />
-              <span className="absolute -top-3 -right-2 bg-pink-500 text-white rounded-full px-2 py-0.5 text-xs group-hover:bg-pink-700 transition duration-300 ease-in-out">
+            {/* Wishlist with Badge - Always visible icon */}
+            <Link
+              to="/wishlist"
+              className="p-2 relative rounded-full hover:bg-gray-800 transition-colors duration-200"
+              aria-label="Wishlist"
+            >
+              <Heart className="h-5 w-5 md:h-6 md:w-6 text-gray-300 hover:text-pink-400" />
+              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                 3
               </span>
             </Link>
 
-            {/* Admin Dashboard */}
+            {/* Admin Dashboard - Text hidden on mobile */}
             {isAdmin && (
               <Link
                 to="/secret-dashboard"
-                className="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded-md font-medium transition duration-300 ease-in-out flex items-center"
+                className="hidden sm:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors duration-200"
               >
-                <Lock className="inline-block mr-1" size={18} />
-                <span className="hidden sm:inline font-bold">Dashboard</span>
+                <Lock className="h-4 w-4 md:h-5 md:w-5" />
+                <span className="font-medium text-sm md:text-base">
+                  Dashboard
+                </span>
               </Link>
             )}
 
-            {/* Log Out button */}
-            <button className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out cursor-pointer">
-              <LogOut size={18} />
-              <span className="hidden sm:inline ml-2 font-bold">Log Out</span>
+            {/* Log Out - Icon only on mobile */}
+            <button
+              className="p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-colors duration-200 flex items-center gap-2"
+              aria-label="Log Out"
+            >
+              <LogOut className="h-5 w-5 md:h-6 md:w-6" />
+              <span className="hidden sm:inline font-medium text-sm md:text-base">
+                Log Out
+              </span>
             </button>
-          </nav>
-        )}
-
-        {!user && (
+          </>
+        ) : (
+          /* Login Button */
           <Link
             to="/login"
-            className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md flex items-center transition duration-300 ease-in-out cursor-pointer"
+            className="px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-colors duration-200 flex items-center gap-2"
           >
-            <LogOut size={18} className="mr-2" />
-            <span className="hidden sm:inline font-bold">Log In</span>
+            <LogOut className="h-5 w-5 md:h-6 md:w-6" />
+            <span className="font-medium text-sm md:text-base">Log In</span>
           </Link>
         )}
       </div>

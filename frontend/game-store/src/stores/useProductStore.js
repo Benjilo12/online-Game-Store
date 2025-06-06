@@ -62,20 +62,19 @@ export const useProductStore = create((set) => ({
   toggleFeaturedProduct: async (productId) => {
     set({ loading: true });
     try {
-      // Assuming the backend toggles the featured status
-      // and returns the updated product
-      const res = await axios.patch(`/products/${productId}`);
-      set((prevState) => ({
-        products: prevState.products.map((p) =>
-          p._id === productId ? { ...p, featured: res.data.featured } : p
+      const response = await axios.patch(`/products/${productId}`);
+      // this will update the isFeatured prop of the product
+      set((prevProducts) => ({
+        products: prevProducts.products.map((product) =>
+          product._id === productId
+            ? { ...product, isFeatured: response.data.isFeatured }
+            : product
         ),
         loading: false,
       }));
-      toast.success("Product updated successfully!");
     } catch (error) {
       set({ loading: false });
-      toast.error("Failed to update product.");
-      console.error("Error updating product:", error);
+      toast.error(error.response.data.error || "Failed to update product");
     }
   },
 }));

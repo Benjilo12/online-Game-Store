@@ -1,25 +1,26 @@
-import { useState } from "react";
-import Header from "../components/Header";
-import SideMenu from "../components/SideMenu";
+import { useEffect, useState } from "react";
+import { useProductStore } from "../stores/useProductStore";
+import DisplayPage from "./DisplayPage";
+import DashboardLayout from "../layout/DashboardLayout";
 
 function GamePage() {
-  const [activeTab, setActiveTab] = useState(false);
+  const [games, setGames] = useState([]);
+  const { products, loading, fetchAllProducts } = useProductStore();
 
-  const handleToggleActive = () => {
-    setActiveTab(!activeTab);
-  };
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(products) && products.length > 0) {
+      setGames(products);
+    }
+  }, [products]);
 
   return (
-    <div className="absolute inset-0 flex gap-[15px] bg-gray-900 text-white overflow-hidden">
-      <SideMenu activeTab={activeTab} />
-      <div
-        className={`relative h-screen rounded-r-[30px] border-r border-black/10 transition-all duration-500  bg-gray-900 ${
-          activeTab ? "w-[93%]" : "w-[82%]"
-        }`}
-      >
-        <Header handleToggleActive={handleToggleActive} />
-      </div>
-    </div>
+    <DashboardLayout>
+      <DisplayPage games={games} />
+    </DashboardLayout>
   );
 }
 

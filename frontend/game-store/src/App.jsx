@@ -7,6 +7,9 @@ import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import AdminPage from "./pages/AdminPage";
 import GamePage from "./pages/GamePage";
+import Category from "./pages/Category";
+import Watchlist from "./pages/Watchlist";
+import Cart from "./pages/Cart";
 
 function App() {
   const { user, checkAuth } = useUserStore();
@@ -18,6 +21,9 @@ function App() {
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
       <Routes>
         <Route path="/" element={<GamePage />} />
+        <Route path="/category" element={<Category />} />
+        <Route path="/watchlist" element={<Watchlist />} />
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="/signup"
           element={!user ? <SignUpPage /> : <Navigate to="/login" />}
