@@ -3,7 +3,7 @@ import { useProductStore } from "../stores/useProductStore";
 import { Star, Trash } from "lucide-react";
 function ProductsList() {
   const { deleteProduct, toggleFeaturedProduct, products } = useProductStore();
-  console.log("ProductsList rendered", products);
+
   return (
     <motion.div
       className="bg-gray-800 shadow-lg rounded-lg overflow-hidden max-w-4xl; mx-auto"

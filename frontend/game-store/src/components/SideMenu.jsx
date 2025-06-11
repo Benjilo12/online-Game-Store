@@ -77,15 +77,27 @@ function SideMenu({ activeTab }) {
       >
         <div className={`flex ${activeTab ? "flex-col gap-3" : "gap-4"}`}>
           {[
-            { icon: <Facebook size={20} />, color: "hover:text-blue-400" },
-            { icon: <Twitch size={20} />, color: "hover:text-violet-400" },
-            { icon: <Youtube size={20} />, color: "hover:text-red-400" },
-            { icon: <Share size={20} />, color: "hover:text-emerald-400" },
+            {
+              icon: <Facebook size={20} />,
+              color: "text-gray-400 hover:text-blue-400",
+            },
+            {
+              icon: <Twitch size={20} />,
+              color: "text-gray-400 hover:text-violet-400",
+            },
+            {
+              icon: <Youtube size={20} />,
+              color: "text-gray-400 hover:text-red-400",
+            },
+            {
+              icon: <Share size={20} />,
+              color: "text-gray-400 hover:text-emerald-400",
+            },
           ].map((social, index) => (
             <a
               key={index}
               href="#"
-              className={`text-gray-400 hover:text-white transition-colors ${social.color}`}
+              className={`transition-colors duration-200 ${social.color}`}
             >
               {social.icon}
             </a>

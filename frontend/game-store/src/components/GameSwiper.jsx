@@ -10,7 +10,7 @@ function GameSwiper({ games }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="w-[97%] md:ml-[36px] py-3 bg-black rounded-xl relative group">
+    <div className="w-[98%] md:ml-[36px] py-3 bg-black rounded-xl relative group">
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
@@ -29,7 +29,7 @@ function GameSwiper({ games }) {
           slideShadows: false,
         }}
         autoplay={{
-          delay: 4500,
+          delay: 3500,
           disableOnInteraction: false,
         }}
         breakpoints={{

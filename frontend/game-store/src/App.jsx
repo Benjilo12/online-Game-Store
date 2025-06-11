@@ -21,8 +21,14 @@ function App() {
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
       <Routes>
         <Route path="/" element={<GamePage />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/watchlist" element={<Watchlist />} />
+        <Route
+          path="/category"
+          element={user ? <Category /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/watchlist"
+          element={user ? <Watchlist /> : <Navigate to="/login" />}
+        />
         <Route path="/cart" element={<Cart />} />
         <Route
           path="/signup"
