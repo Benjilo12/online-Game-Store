@@ -22,8 +22,8 @@ function GameSwiper({ games }) {
         centeredSlides={true}
         slidesPerView={"auto"}
         coverflowEffect={{
-          rotate: 5,
-          stretch: -30,
+          rotate: 0,
+          stretch: 0,
           depth: 100,
           modifier: 1.5,
           slideShadows: false,

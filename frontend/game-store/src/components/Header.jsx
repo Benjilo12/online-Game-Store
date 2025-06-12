@@ -6,10 +6,14 @@ import {
   ShoppingCart,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../stores/useCartStore";
 
 function Header({ handleToggleActive }) {
   const user = true; // Replace with actual user state management
   const isAdmin = true; // Replace with actual admin state management
+
+  // Fix: Add null check and default empty array
+  const cart = useCartStore((state) => state.cart) || [];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 flex justify-between items-center border-b border-gray-800">
@@ -33,11 +37,13 @@ function Header({ handleToggleActive }) {
               aria-label="Shopping Cart"
             >
               <ShoppingCart className="h-5 w-5 md:h-6 md:w-6 text-gray-300 hover:text-emerald-400" />
+              {/* Fix: Add null check for cart.length */}
               <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                3
+                {cart?.length || 0}
               </span>
             </Link>
 
+            {/* Rest of your existing code remains exactly the same */}
             {/* Wishlist with Badge - Always visible icon */}
             <Link
               to="/wishlist"

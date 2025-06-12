@@ -10,17 +10,29 @@ import GamePage from "./pages/GamePage";
 import Category from "./pages/Category";
 import Watchlist from "./pages/Watchlist";
 import Cart from "./pages/Cart";
+import { useCartStore } from "./stores/useCartStore";
+import { LoadingSpinner } from "./components/LoadingSpinner";
 
 function App() {
-  const { user, checkAuth } = useUserStore();
+  const { user, checkAuth, checkingAuth } = useUserStore();
+  const { getCartItems } = useCartStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  useEffect(() => {
+    getCartItems();
+  }, [getCartItems]);
+
+  if (checkingAuth) return <LoadingSpinner />;
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
       <Routes>
-        <Route path="/" element={<GamePage />} />
+        <Route
+          path="/"
+          element={user ? <GamePage /> : <Navigate to="/login" />}
+        />
         <Route
           path="/category"
           element={user ? <Category /> : <Navigate to="/login" />}
@@ -29,7 +41,10 @@ function App() {
           path="/watchlist"
           element={user ? <Watchlist /> : <Navigate to="/login" />}
         />
-        <Route path="/cart" element={<Cart />} />
+        <Route
+          path="/cart"
+          element={user ? <Cart /> : <Navigate to="/login" />}
+        />
         <Route
           path="/signup"
           element={!user ? <SignUpPage /> : <Navigate to="/login" />}

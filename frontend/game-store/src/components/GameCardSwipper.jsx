@@ -3,8 +3,13 @@ import { Navigation } from "swiper/modules";
 import { ShoppingCart, Heart } from "lucide-react";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useCartStore } from "../stores/useCartStore";
+import { useUserStore } from "../stores/useUserStore";
+import toast from "react-hot-toast";
 
 export default function GamecardSwipper({ game }) {
+  const { user } = useUserStore();
+  const { addToCart } = useCartStore();
   const getImages = () => {
     if (Array.isArray(game?.images) && game.images.length > 0) {
       return game.images;
@@ -16,6 +21,16 @@ export default function GamecardSwipper({ game }) {
   };
 
   const images = getImages();
+
+  const handleAddToCart = () => {
+    if (!user) {
+      toast.error("please login to add products to cart", { id: "login" });
+      return;
+    } else {
+      //add to cart
+      addToCart(game);
+    }
+  };
 
   return (
     <div className="relative group w-full max-w-xs rounded-xl overflow-hidden shadow-lg bg-[#0e1220] text-white m-auto">
@@ -53,7 +68,10 @@ export default function GamecardSwipper({ game }) {
         <button className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full cursor-pointer">
           <Heart size={18} />
         </button>
-        <button className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full cursor-pointer">
+        <button
+          className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full cursor-pointer"
+          onClick={handleAddToCart}
+        >
           <ShoppingCart size={18} />
         </button>
       </div>

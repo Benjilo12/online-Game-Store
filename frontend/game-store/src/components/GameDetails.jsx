@@ -39,12 +39,7 @@ function GameDetails() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {displayedGames.map((game) => (
-            <Gamecard
-              key={game.id || game._id}
-              image={game.image}
-              name={game.name}
-              price={game.price}
-            />
+            <Gamecard game={game} />
           ))}
         </div>
       )}

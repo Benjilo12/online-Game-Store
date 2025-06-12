@@ -19,7 +19,7 @@ function GamePage() {
 
   return (
     <DashboardLayout>
-      <DisplayPage games={games} />
+      <DisplayPage games={games} key={games._id} />
     </DashboardLayout>
   );
 }
