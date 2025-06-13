@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Homepage from "./pages/Homepage";
+
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import { Toaster } from "react-hot-toast";
@@ -11,10 +11,9 @@ import Category from "./pages/Category";
 import Watchlist from "./pages/Watchlist";
 import Cart from "./pages/Cart";
 import { useCartStore } from "./stores/useCartStore";
-import { LoadingSpinner } from "./components/LoadingSpinner";
 
 function App() {
-  const { user, checkAuth, checkingAuth } = useUserStore();
+  const { user, checkAuth } = useUserStore();
   const { getCartItems } = useCartStore();
 
   useEffect(() => {
@@ -25,7 +24,6 @@ function App() {
     getCartItems();
   }, [getCartItems]);
 
-  if (checkingAuth) return <LoadingSpinner />;
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
       <Routes>

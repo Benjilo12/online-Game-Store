@@ -83,6 +83,8 @@ export const addToCart = async (req, res) => {
   }
 };
 
+// Add this to your cart.controller.js
+// In cart.controller.js
 export const removeAllCart = async (req, res) => {
   try {
     const { productId } = req.body;
@@ -94,7 +96,7 @@ export const removeAllCart = async (req, res) => {
     }
 
     if (!productId) {
-      user.cartItems = [];
+      user.cartItems = []; // This should clear the entire cart
     } else {
       user.cartItems = user.cartItems.filter(
         (item) => item.product.toString() !== productId
@@ -102,7 +104,7 @@ export const removeAllCart = async (req, res) => {
     }
 
     await user.save();
-    res.json(user.cartItems);
+    res.json(user.cartItems); // Returns empty array when cleared
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
