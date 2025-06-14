@@ -44,7 +44,7 @@ const CartPage = () => {
             {cart.length > 0 && (
               <button
                 onClick={handleClearCart}
-                className="text-red-400 hover:text-red-300 text-sm font-medium disabled:opacity-50"
+                className="text-red-400 hover:text-red-300 text-sm font-medium disabled:opacity-50 cursor-pointer"
                 disabled={cartLoading}
               >
                 {cartLoading ? "Clearing..." : "Clear Cart"}

@@ -6,10 +6,12 @@ import "swiper/css/navigation";
 import { useCartStore } from "../stores/useCartStore";
 import { useUserStore } from "../stores/useUserStore";
 import toast from "react-hot-toast";
+import { useWatchlistStore } from "../stores/useWatchlistStore";
 
 export default function GamecardSwipper({ game }) {
   const { user } = useUserStore();
   const { addToCart } = useCartStore();
+  const { addToWatchlist } = useWatchlistStore();
   const getImages = () => {
     if (Array.isArray(game?.images) && game.images.length > 0) {
       return game.images;
@@ -30,6 +32,16 @@ export default function GamecardSwipper({ game }) {
       //add to cart
       addToCart(game);
     }
+  };
+
+  const handleAddToWatchlist = () => {
+    if (!user) {
+      toast.error("Please login to add to watchlist", {
+        id: "login-watchlist",
+      });
+      return;
+    }
+    addToWatchlist(game);
   };
 
   return (
@@ -65,7 +77,10 @@ export default function GamecardSwipper({ game }) {
 
       {/* Hover Icons */}
       <div className="absolute bottom-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex gap-2">
-        <button className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full cursor-pointer">
+        <button
+          className="bg-white/10 hover:bg-white/20 text-white p-2 rounded-full cursor-pointer"
+          onClick={handleAddToWatchlist}
+        >
           <Heart size={18} />
         </button>
         <button

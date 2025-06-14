@@ -2,10 +2,12 @@ import { Heart, ShoppingBag } from "lucide-react";
 import { useCartStore } from "../stores/useCartStore";
 import { useUserStore } from "../stores/useUserStore";
 import toast from "react-hot-toast";
+import { useWatchlistStore } from "../stores/useWatchlistStore";
 
 function Gamecard({ game }) {
   const { user } = useUserStore();
   const { addToCart } = useCartStore();
+  const { addToWatchlist } = useWatchlistStore();
 
   const handleAddToCart = () => {
     if (!user) {
@@ -15,6 +17,16 @@ function Gamecard({ game }) {
       //add to cart
       addToCart(game);
     }
+  };
+
+  const handleAddToWatchlist = () => {
+    if (!user) {
+      toast.error("Please login to add to watchlist", {
+        id: "login-watchlist",
+      });
+      return;
+    }
+    addToWatchlist(game);
   };
 
   return (
@@ -28,7 +40,10 @@ function Gamecard({ game }) {
 
       {/* Hover Icons inside image (bottom-right) */}
       <div className="absolute bottom-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button className="bg-[#192033] p-2 rounded-full hover:bg-red-400 cursor-pointer">
+        <button
+          className="bg-[#192033] p-2 rounded-full hover:bg-red-400 cursor-pointer"
+          onClick={handleAddToWatchlist}
+        >
           <Heart size={16} className="text-white hover:text-white" />
         </button>
         <button className="bg-[#192033] p-2 rounded-full hover:bg-emerald-500 cursor-pointer">

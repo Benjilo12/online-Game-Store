@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
+import { useWatchlistStore } from "../stores/useWatchlistStore";
 
 function Header({ handleToggleActive }) {
   const user = true; // Replace with actual user state management
@@ -14,6 +15,7 @@ function Header({ handleToggleActive }) {
 
   // Fix: Add null check and default empty array
   const cart = useCartStore((state) => state.cart) || [];
+  const watchlist = useWatchlistStore((state) => state.watchlist) || [];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-sm px-4 py-3 md:px-6 md:py-4 flex justify-between items-center border-b border-gray-800">
@@ -46,13 +48,14 @@ function Header({ handleToggleActive }) {
             {/* Rest of your existing code remains exactly the same */}
             {/* Wishlist with Badge - Always visible icon */}
             <Link
-              to="/wishlist"
+              to="/watchlist"
               className="p-2 relative rounded-full hover:bg-gray-800 transition-colors duration-200"
               aria-label="Wishlist"
             >
               <Heart className="h-5 w-5 md:h-6 md:w-6 text-gray-300 hover:text-pink-400" />
               <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                3
+                {" "}
+                {watchlist?.length || 0}
               </span>
             </Link>
 

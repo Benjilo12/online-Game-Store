@@ -8,8 +8,8 @@ import {
 
 const router = express.Router();
 
-router.post("/watchlist", protectRoute, addToWatchList);
-router.delete("/:id", protectRoute, removeFromWatchList);
-router.get("/watchlist", protectRoute, getWatchListProducts);
+router.post("/", protectRoute, addToWatchList);
+router.delete("/:productId", protectRoute, removeFromWatchList);
+router.get("/", protectRoute, getWatchListProducts);
 
 export default router;
