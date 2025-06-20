@@ -24,7 +24,7 @@ function SideMenu({ activeTab }) {
     >
       {/* Logo */}
       <NavLink
-        to="/game-page"
+        to="/"
         className={`flex items-center mb-8 ${
           activeTab ? "justify-center" : "justify-start"
         }`}

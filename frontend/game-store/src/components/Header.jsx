@@ -8,10 +8,15 @@ import {
 import { Link } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import { useWatchlistStore } from "../stores/useWatchlistStore";
+import { useUserStore } from "../stores/useUserStore";
 
 function Header({ handleToggleActive }) {
-  const user = true; // Replace with actual user state management
-  const isAdmin = true; // Replace with actual admin state management
+  // const user = true; // Replace with actual user state management
+  // Replace with actual admin state management
+
+  const { user, logout } = useUserStore();
+
+  const isAdmin = user?.role === "admin";
 
   // Fix: Add null check and default empty array
   const cart = useCartStore((state) => state.cart) || [];
@@ -74,8 +79,9 @@ function Header({ handleToggleActive }) {
 
             {/* Log Out - Icon only on mobile */}
             <button
-              className="p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-colors duration-200 flex items-center gap-2"
+              className="p-2 sm:px-3 sm:py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white transition-colors duration-200 flex items-center gap-2 cursor-pointer"
               aria-label="Log Out"
+              onClick={logout}
             >
               <LogOut className="h-5 w-5 md:h-6 md:w-6" />
               <span className="hidden sm:inline font-medium text-sm md:text-base">

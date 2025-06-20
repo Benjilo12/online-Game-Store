@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import { Toaster } from "react-hot-toast";
@@ -11,21 +10,35 @@ import Category from "./pages/Category";
 import Watchlist from "./pages/Watchlist";
 import Cart from "./pages/Cart";
 import { useCartStore } from "./stores/useCartStore";
+import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
+import DashboardLayout from "./layout/DashboardLayout";
+import PageLoader from "./components/PageLoader";
+import Homepage from "./pages/Homepage";
 
 function App() {
-  const { user, checkAuth } = useUserStore();
+  const { user, checkAuth, checkingAuth } = useUserStore();
   const { getCartItems } = useCartStore();
 
   useEffect(() => {
-    checkAuth();
+    const initializeAuth = async () => {
+      try {
+        await checkAuth();
+      } catch (error) {
+        console.log("Auth initialization error:", error);
+      }
+    };
+    initializeAuth();
   }, [checkAuth]);
 
   useEffect(() => {
+    if (!user) return;
     getCartItems();
-  }, [getCartItems]);
+  }, [getCartItems, user]);
+
+  if (checkingAuth) return <PageLoader />;
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden ">
+    <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
       <Routes>
         <Route
           path="/"
@@ -44,14 +57,22 @@ function App() {
           element={user ? <Cart /> : <Navigate to="/login" />}
         />
         <Route
+          path="/purchase-success"
+          element={
+            <DashboardLayout>
+              <PurchaseSuccessPage />
+            </DashboardLayout>
+          }
+        />
+        <Route path="/home-page" element={<Homepage />} />
+        <Route
           path="/signup"
-          element={!user ? <SignUpPage /> : <Navigate to="/login" />}
+          element={!user ? <SignUpPage /> : <Navigate to="/" />}
         />
         <Route
           path="/login"
           element={!user ? <LoginPage /> : <Navigate to="/" />}
         />
-
         <Route
           path="/secret-dashboard"
           element={
@@ -59,7 +80,7 @@ function App() {
           }
         />
       </Routes>
-      <Toaster />
+      <Toaster position="top-right" />
     </div>
   );
 }

@@ -6,108 +6,134 @@ export const useUserStore = create((set, get) => ({
   user: null,
   loading: false,
   checkingAuth: true,
+  error: null,
 
-  // Fetch user data
   signup: async ({ name, email, password, confirmPassword }) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
 
-    // Validate input
     if (password !== confirmPassword) {
       set({ loading: false });
-      return toast.error("Passwords do not match");
+      return toast.error("Passwords don't match");
     }
 
-    // Perform signup request
     try {
-      const res = await axios.post("/auth/signup", {
-        name,
-        email,
-        password,
-      });
-      set({ user: res.data, loading: false });
+      const res = await axios.post("/auth/signup", { name, email, password });
+      set({ user: res.data.user, loading: false });
+      toast.success("Account created successfully!");
+      return res.data;
     } catch (error) {
-      set({ loading: false });
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Signup failed");
-      } else {
-        toast.error("An error occurred during signup");
-      }
+      const errorMsg = error.response?.data?.message || "Signup failed";
+      set({ loading: false, error: errorMsg });
+      toast.error(errorMsg);
+      throw error;
     }
   },
-  login: async (email, password) => {
-    set({ loading: true });
 
-    // Perform signup request
+  login: async (email, password) => {
+    set({ loading: true, error: null });
+
     try {
-      const res = await axios.post("/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post("/auth/login", { email, password });
       set({ user: res.data, loading: false });
+      toast.success("Logged in successfully!");
+      return res.data;
     } catch (error) {
-      set({ loading: false });
-      set({ loading: false });
-      toast.error(error.response.data.message || "An error occurred");
+      const errorMsg = error.response?.data?.message || "Login failed";
+      set({ loading: false, error: errorMsg });
+      toast.error(errorMsg);
+      throw error;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await axios.post("/auth/logout");
+      set({ user: null });
+      toast.success("Logged out successfully");
+    } catch (error) {
+      const errorMsg = error.response?.data?.message || "Logout failed";
+      set({ error: errorMsg });
+      toast.error(errorMsg);
     }
   },
 
   checkAuth: async () => {
-    set({ checkingAuth: true });
+    set({ checkingAuth: true, error: null });
     try {
       const response = await axios.get("/auth/profile");
       set({ user: response.data, checkingAuth: false });
+      return response.data;
     } catch (error) {
-      console.log(error.message);
-      set({ checkingAuth: false, user: null });
+      if (error.response?.status === 401) {
+        try {
+          await get().refreshToken();
+          const retryResponse = await axios.get("/auth/profile");
+          set({ user: retryResponse.data, checkingAuth: false });
+          return retryResponse.data;
+        } catch (refreshError) {
+          set({ user: null, checkingAuth: false });
+          throw refreshError;
+        }
+      }
+      set({ user: null, checkingAuth: false });
+      throw error;
     }
   },
-  refreshToken: async () => {
-    // Prevent multiple simultaneous refresh attempts
-    if (get().checkingAuth) return;
 
-    set({ checkingAuth: true });
+  refreshToken: async () => {
+    if (get().checkingAuth) return;
+    set({ checkingAuth: true, error: null });
     try {
       const response = await axios.post("/auth/refresh-token");
       set({ checkingAuth: false });
       return response.data;
     } catch (error) {
-      set({ user: null, checkingAuth: false });
+      const errorMsg = error.response?.data?.message || "Token refresh failed";
+      set({ user: null, checkingAuth: false, error: errorMsg });
       throw error;
     }
   },
 }));
 
-// TODO: Implement the axios interceptors for refreshing access token
-
-// Axios interceptor for token refresh
+// Axios interceptor setup
 let refreshPromise = null;
+
+axios.interceptors.request.use((config) => {
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("accessToken="))
+    ?.split("=")[1];
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        // If a refresh is already in progress, wait for it to complete
         if (refreshPromise) {
           await refreshPromise;
           return axios(originalRequest);
         }
 
-        // Start a new refresh process
         refreshPromise = useUserStore.getState().refreshToken();
         await refreshPromise;
         refreshPromise = null;
 
         return axios(originalRequest);
       } catch (refreshError) {
-        // If refresh fails, redirect to login or handle as needed
         useUserStore.getState().logout();
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );

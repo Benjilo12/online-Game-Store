@@ -1,10 +1,11 @@
-import Navbar from "../components/Navbar";
+import CustomNavbar from "../components/CustomNavbar";
+import HeroSection from "../components/HeroSection";
 
 function Homepage() {
   return (
     <div>
-      <Navbar />
-      <h1>Home</h1>
+      <CustomNavbar />
+      <HeroSection />
     </div>
   );
 }

@@ -4,7 +4,13 @@ import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem";
 import { useCartStore } from "../stores/useCartStore";
 import DashboardLayout from "../layout/DashboardLayout";
+import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
+import axios from "../lib/axios";
+
+const stripePromise = loadStripe(
+  "pk_test_51RUPZzRjuTtom2BJttFIgHsVQWzynyqGRBaosQpGXvg6mHX7IXLwVW1mHXluQ4oc2lZJuAZxZHXvYxWGEZqxrAKv002UgzeQ6Q"
+);
 
 const CartPage = () => {
   const {
@@ -20,9 +26,28 @@ const CartPage = () => {
     getCartItems();
   }, [getCartItems]);
 
-  const handleCheckout = () => {
-    // Add your checkout logic here
-    console.log("Proceeding to checkout");
+  const handleCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+
+      const res = await axios.post(
+        "/payment/create-checkout-session", // Updated path
+        { products: cart },
+        { withCredentials: true }
+      );
+
+      const { id: sessionId } = res.data;
+
+      const result = await stripe.redirectToCheckout({ sessionId });
+
+      if (result.error) {
+        console.error(result.error);
+        // Show error to user
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      // Show error to user
+    }
   };
 
   const handleClearCart = async () => {

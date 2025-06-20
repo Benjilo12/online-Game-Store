@@ -1,50 +1,62 @@
 import { stripe } from "../lib/stripe.js";
+import Order from "../models/order.model.js";
 
 export const createCheckoutSession = async (req, res) => {
   try {
     const { products } = req.body;
 
     // Validate the products array
-    if (!Array.isArray(products) || products.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "Invalid  or empty products array" });
+    if (!Array.isArray(products)) {
+      return res.status(400).json({ error: "Products must be an array" });
     }
 
-    let totalAmount = 0;
+    // Create minimal product data for metadata
+    const minimalProducts = products.map((product) => ({
+      id: product._id,
+      quantity: product.quantity || 1,
+      price: product.price,
+    }));
 
-    // Validate each product
-    const lineItems = products.map((product) => {
-      const amount = Math.round(product.price * 100); // Convert to cents
-      totalAmount += amount * product.quantity;
-
-      return {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: product.name,
-            images: [product.image],
-          },
-          unit_amount: amount,
+    const lineItems = products.map((product) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: product.name,
+          images: [product.image],
         },
-        quantity: product.quantity,
-      };
-    });
+        unit_amount: Math.round(product.price * 100), // Convert to cents
+      },
+      quantity: product.quantity || 1,
+    }));
 
-    // Create a Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
       success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: ` ${process.env.CLIENT_URL}/purchase-cancel`,
+      cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
       metadata: {
         userId: req.user._id.toString(),
+        products: JSON.stringify(minimalProducts), // Store minimal product data
+        productCount: products.length, // Additional useful metadata
+        totalAmount: products.reduce(
+          (sum, product) => sum + product.price * (product.quantity || 1),
+          0
+        ),
       },
     });
+
+    // Return the session ID
+    res.json({ id: session.id });
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({
+      error: error.message,
+      details:
+        error.type === "StripeInvalidRequestError"
+          ? "Metadata too large - simplified product data"
+          : undefined,
+    });
   }
 };
 
