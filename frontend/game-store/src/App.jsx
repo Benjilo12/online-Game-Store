@@ -40,43 +40,40 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
       <Routes>
+        <Route path="/" element={<Homepage />} />
         <Route
-          path="/"
-          element={user ? <GamePage /> : <Navigate to="/login" />}
+          path="/signup"
+          element={!user ? <SignUpPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/login"
+          element={!user ? <LoginPage /> : <Navigate to="/gamepage" />}
+        />
+        <Route
+          path="/secret-dashboard"
+          element={
+            user?.role === "admin" ? <AdminPage /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/game-page"
+          element={user ? <GamePage /> : <Navigate to="/" />}
         />
         <Route
           path="/category"
-          element={user ? <Category /> : <Navigate to="/login" />}
+          element={user ? <Category /> : <Navigate to="/" />}
         />
         <Route
           path="/watchlist"
-          element={user ? <Watchlist /> : <Navigate to="/login" />}
+          element={user ? <Watchlist /> : <Navigate to="/" />}
         />
-        <Route
-          path="/cart"
-          element={user ? <Cart /> : <Navigate to="/login" />}
-        />
+        <Route path="/cart" element={user ? <Cart /> : <Navigate to="/" />} />
         <Route
           path="/purchase-success"
           element={
             <DashboardLayout>
               <PurchaseSuccessPage />
             </DashboardLayout>
-          }
-        />
-        <Route path="/home-page" element={<Homepage />} />
-        <Route
-          path="/signup"
-          element={!user ? <SignUpPage /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={!user ? <LoginPage /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/secret-dashboard"
-          element={
-            user?.role === "admin" ? <AdminPage /> : <Navigate to="/login" />
           }
         />
       </Routes>

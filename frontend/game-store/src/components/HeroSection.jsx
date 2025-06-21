@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Gamepad2, Trophy, Users } from "lucide-react";
+import { ArrowRight, Gamepad2, Trophy, Users, ArrowDown } from "lucide-react";
 
 // Replace with your actual image path
 import ghost from "./images/ghost.png";
@@ -7,11 +7,11 @@ import ghost from "./images/ghost.png";
 const HeroSection = () => {
   return (
     <section
-      className="relative text-white pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden"
+      className="relative text-white h-screen w-full flex items-center justify-center overflow-hidden"
       style={{
         backgroundImage: `linear-gradient(rgba(56, 54, 54, 0.56), rgba(0, 0, 0, 0.7)), url(${ghost})`,
         backgroundSize: "cover",
-        backgroundPosition: "top ",
+        backgroundPosition: "top",
         backgroundRepeat: "no-repeat",
       }}
     >
@@ -72,6 +72,14 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Floating scroll down arrow */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
+        <div className="flex flex-col items-center">
+          <span className="text-sm text-gray-300 mb-1">Scroll Down</span>
+          <ArrowDown className="w-8 h-8 text-white" size={25} />
         </div>
       </div>
     </section>

@@ -24,7 +24,7 @@ function SideMenu({ activeTab }) {
     >
       {/* Logo */}
       <NavLink
-        to="/"
+        to="/game-page"
         className={`flex items-center mb-8 ${
           activeTab ? "justify-center" : "justify-start"
         }`}
@@ -40,7 +40,7 @@ function SideMenu({ activeTab }) {
       {/* Navigation Links */}
       <ul className="flex flex-col gap-2 flex-1">
         {[
-          { icon: <House size={24} />, text: "Home", path: "/" },
+          { icon: <House size={24} />, text: "Home", path: "/game-page" },
           {
             icon: <Grid2x2 size={24} />,
             text: "Categories",

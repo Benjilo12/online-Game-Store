@@ -9,21 +9,31 @@ import {
 } from "lucide-react";
 import { animate, motion } from "motion/react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  // Add to your state:
   const { login, loading } = useUserStore();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
 
-    login(email, password);
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate("/game-page"); // Navigate to game page on success
+      } else {
+        setError("Invalid email or password");
+      }
+    } catch (erorr) {
+      setError("An error occurred. Please try again.");
+    }
   };
   return (
     <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-40">
