@@ -149,7 +149,7 @@ const EmptyCartUI = () => (
       Looks like you haven't added anything to your cart yet.
     </p>
     <Link
-      to="/"
+      to="/game-page"
       className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-md transition-colors"
     >
       Start Shopping

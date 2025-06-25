@@ -1,5 +1,7 @@
 import Banner from "../components/Banner";
+import BrandCarousel from "../components/BrandCarousel";
 import CustomNavbar from "../components/CustomNavbar";
+import Footer from "../components/Footer";
 import GameShowcase from "../components/GameShowcase";
 import HeroSection from "../components/HeroSection";
 
@@ -10,6 +12,8 @@ function Homepage() {
       <HeroSection />
       <Banner />
       <GameShowcase />
+      <BrandCarousel />
+      <Footer />
     </div>
   );
 }

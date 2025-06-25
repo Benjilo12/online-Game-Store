@@ -118,7 +118,7 @@ const PurchaseSuccessPage = () => {
               Thanks for trusting us!
             </button>
             <Link
-              to={"/"}
+              to={"/category"}
               className="w-full bg-gray-700 hover:bg-gray-600 text-emerald-400 font-bold py-2 px-4 
               rounded-lg transition duration-300 flex items-center justify-center text-sm sm:text-base cursor-pointer"
             >

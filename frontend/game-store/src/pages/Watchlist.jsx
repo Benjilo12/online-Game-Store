@@ -23,7 +23,7 @@ function Watchlist() {
             description="Games you add to your watchlist will appear here"
             icon="heart"
             actionText="Browse Games"
-            actionLink="/"
+            actionLink="/game-page"
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
