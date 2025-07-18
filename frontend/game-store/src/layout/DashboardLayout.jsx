@@ -11,7 +11,7 @@ function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="absolute inset-0 flex bg-gray-800 text-white overflow-hidden">
+    <div className="absolute inset-0 flex bg-gray-900 text-white overflow-hidden">
       <SideMenu activeTab={activeTab} />
 
       <div
