@@ -1,9 +1,9 @@
 import { ArrowRight, Loader, Lock, Mail, User, UserPlus } from "lucide-react";
-import { animate, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import PasswordStrength from "../components/PasswordStrength";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
 
 function SignUpPage() {
@@ -15,16 +15,30 @@ function SignUpPage() {
   });
 
   const { signup, loading } = useUserStore();
+  const navigate = useNavigate();
 
   // Add to your state:
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
-    signup(formData);
+
+    try {
+      // Assuming signup returns a promise that resolves on success
+      await signup(formData);
+
+      // Show success message (optional)
+      console.log("Signup successful! Redirecting to login...");
+
+      // Redirect to login page after successful signup
+      navigate("/login");
+    } catch (error) {
+      console.error("Signup failed:", error);
+      // Error handling would be done in your signup function
+    }
   };
 
   return (

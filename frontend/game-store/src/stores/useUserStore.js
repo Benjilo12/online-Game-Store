@@ -47,12 +47,20 @@ export const useUserStore = create((set, get) => ({
 
   logout: async () => {
     try {
+      // Clear the access token from cookies first
+      document.cookie =
+        "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+      // Then make the API call to logout
       await axios.post("/auth/logout");
+
+      // Clear user state
       set({ user: null });
       toast.success("Logged out successfully");
     } catch (error) {
+      // Even if the API call fails, we should still clear the user state
       const errorMsg = error.response?.data?.message || "Logout failed";
-      set({ error: errorMsg });
+      set({ user: null, error: errorMsg });
       toast.error(errorMsg);
     }
   },
@@ -129,6 +137,9 @@ axios.interceptors.response.use(
 
         return axios(originalRequest);
       } catch (refreshError) {
+        // Clear the token from cookies on refresh error
+        document.cookie =
+          "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         useUserStore.getState().logout();
         return Promise.reject(refreshError);
       }

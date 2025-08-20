@@ -47,7 +47,7 @@ function App() {
         />
         <Route
           path="/login"
-          element={!user ? <LoginPage /> : <Navigate to="/gamepage" />}
+          element={!user ? <LoginPage /> : <Navigate to="/game-page" />}
         />
         <Route
           path="/secret-dashboard"

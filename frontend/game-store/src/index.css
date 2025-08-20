@@ -4,11 +4,11 @@
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
 
-* {
+/* * {
   font-family: "Comic Neue", system-ui;
   font-weight: 400;
   font-style: normal;
-}
+} */
 
 /* Custom scrollbar styles */
 .custom-scrollbar {
